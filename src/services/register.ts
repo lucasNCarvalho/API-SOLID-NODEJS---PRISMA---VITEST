@@ -10,7 +10,7 @@ interface RegisterServiceRequest {
     password: string;
 }
 
-interface ServiceResponse {
+interface RegisterServiceResponse {
     user: User
 }
 
@@ -24,7 +24,7 @@ export class RegisterService {
     // to avoid the code above, its possivel to use just like below
     // constructor(private usersRepository:any) {}  
 
-    async execute({ name, email, password }: RegisterServiceRequest): Promise<ServiceResponse> {
+    async execute({ name, email, password }: RegisterServiceRequest): Promise<RegisterServiceResponse> {
         const password_hash = await hash(password, 6)
 
         const userWithSameEmail = await this.usersRepository.findByEmail(email)

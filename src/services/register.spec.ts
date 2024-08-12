@@ -1,21 +1,21 @@
 import { expect, describe, it, beforeEach } from 'vitest'
 import { RegisterService } from './register'
 import { compare } from 'bcryptjs'
-import { inMemoryUsersRepository } from '@/repositories/in-memory/in-memory-users-repository'
+import { InMemoryUsersRepository } from '@/repositories/in-memory/in-memory-users-repository'
 import { UserAlreadyExistsError } from './errors/user-already-exists'
-import { afterEach } from 'node:test'
 
-let usersRepository: inMemoryUsersRepository
+
+let usersRepository: InMemoryUsersRepository
 let sut: RegisterService
 
 describe('Register Service', () => {
     beforeEach(() => {
-        usersRepository = new inMemoryUsersRepository()
-        sut = new RegisterService(usersRepository)  
+        usersRepository = new InMemoryUsersRepository()
+        sut = new RegisterService(usersRepository)
     })
 
     it('should be able to register', async () => {
-        
+
         const { user } = await sut.execute({
             name: 'John Doe',
             email: 'jhondoe@hotmail.com',
@@ -26,7 +26,7 @@ describe('Register Service', () => {
     })
 
     it('should hash user password upon registration', async () => {
-         
+
         const { user } = await sut.execute({
             name: 'John Doe',
             email: 'jhondoe@hotmail.com',
@@ -42,7 +42,7 @@ describe('Register Service', () => {
     })
 
     it('should not be able to register with same email twice', async () => {
-         
+
         const email = 'jhondoe@example.com'
 
         await sut.execute({
@@ -51,7 +51,7 @@ describe('Register Service', () => {
             password: '123456'
         })
 
-     await expect(() => 
+        await expect(() =>
             sut.execute({
                 name: 'John Doe',
                 email,
